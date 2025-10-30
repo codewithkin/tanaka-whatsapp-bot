@@ -21,6 +21,9 @@
   },
   "dependencies": {
     "@mastra/core": "^0.23.3",
+    "@mastra/libsql": "^0.16.1",
+    "@mastra/memory": "^0.15.10",
+    "@mastra/pg": "^0.17.7",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
