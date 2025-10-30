@@ -3,6 +3,10 @@ import { Client } from 'whatsapp-web.js';
 
 @Injectable()
 export class WhatsappService {
+  onModuleInit() {
+    this.initializeClient();
+  }
+
   initializeClient() {
     const client = new Client({
       puppeteer: { headless: true },
