@@ -29,11 +29,13 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
+    "@types/uuid": "^10.0.0",
     "dotenv": "^17.2.3",
     "prisma": "^6.18.0",
     "qrcode-terminal": "^0.12.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "uuid": "^13.0.0",
     "whatsapp-web.js": "^1.34.1"
   },
   "devDependencies": {
