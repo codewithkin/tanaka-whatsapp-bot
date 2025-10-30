@@ -10,6 +10,7 @@ import { AgentsModule } from './agents/agents.module';
 import { HelpersModule } from './helpers/helpers.module';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { OrdersModule } from './orders/orders.module';
     HelpersModule,
     ProductsModule,
     OrdersModule,
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, AgentsService, HelpersService],
