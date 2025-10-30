@@ -1,4 +1,6 @@
 import { Agent } from '@mastra/core/agent';
+import { Memory } from '@mastra/memory';
+import storage from '../mastra/storage';
 
 export const TanakaAgent = new Agent({
   name: 'Tanaka',
@@ -26,6 +28,9 @@ Business Info:
 - Phone: +263 78 492 3973
 - Email: accworldmutare@gmail.com
 `,
+  memory: new Memory({
+    storage: storage,
+  }),
 });
 
 export default TanakaAgent;
