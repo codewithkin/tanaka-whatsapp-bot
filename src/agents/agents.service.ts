@@ -13,12 +13,20 @@ export class AgentsService {
     query: string;
     userDetails: string;
   }): Promise<string> {
-    const res = await TanakaAgent.generate([
+    const res = await TanakaAgent.generate(
+      [
+        {
+          role: 'user',
+          content: `User Details: ${userDetails}\n\nQuery: ${query}`,
+        },
+      ],
       {
-        role: 'user',
-        content: `User Details: ${userDetails}\n\nQuery: ${query}`,
+        memory: {
+          thread: userDetails,
+          resource: 'tanaka-agent-memory',
+        },
       },
-    ]);
+    );
 
     return res.text;
   }
