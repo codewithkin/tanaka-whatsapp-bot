@@ -15,7 +15,7 @@ export class WhatsappService {
 
     client.on('qr', (qr) => {
       // Kin here: you should scan this code with your phone to connect WhatsApp
-      qrcode.generate(qr, {small: true});
+      qrcode.generate(qr, { small: true });
     });
 
     client.on('ready', () => {
