@@ -7,9 +7,10 @@ import { AgentsService } from './agents/agents.service';
 import { ConfigModule } from '@nestjs/config';
 import { HelpersService } from './helpers/helpers.service';
 import { AgentsModule } from './agents/agents.module';
+import { HelpersModule } from './helpers/helpers.module';
 
 @Module({
-  imports: [WhatsappModule, ConfigModule.forRoot(), AgentsModule],
+  imports: [WhatsappModule, ConfigModule.forRoot(), AgentsModule, HelpersModule],
   controllers: [AppController],
   providers: [AppService, PrismaService, AgentsService, HelpersService],
 })
