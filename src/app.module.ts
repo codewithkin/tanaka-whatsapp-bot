@@ -8,9 +8,18 @@ import { ConfigModule } from '@nestjs/config';
 import { HelpersService } from './helpers/helpers.service';
 import { AgentsModule } from './agents/agents.module';
 import { HelpersModule } from './helpers/helpers.module';
+import { ProductsModule } from './products/products.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
-  imports: [WhatsappModule, ConfigModule.forRoot(), AgentsModule, HelpersModule],
+  imports: [
+    WhatsappModule,
+    ConfigModule.forRoot(),
+    AgentsModule,
+    HelpersModule,
+    ProductsModule,
+    OrdersModule,
+  ],
   controllers: [AppController],
   providers: [AppService, PrismaService, AgentsService, HelpersService],
 })
