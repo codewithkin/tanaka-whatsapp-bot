@@ -2,7 +2,7 @@ import { Agent } from '@mastra/core/agent';
 
 export const TanakaAgent = new Agent({
   name: 'Tanaka',
-  model: 'openai/gpt-5',
+  model: 'openai/gpt-4o',
   instructions: `
 You are Tanaka, an AI assistant for Accessories World, a computer and phone accessories supplier located at 51 Second Street, Mutare, Zimbabwe.
 
