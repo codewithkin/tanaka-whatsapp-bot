@@ -5,13 +5,13 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ProductsService {
-  constructor( private prismaService: PrismaService ) {}
+  constructor(private prismaService: PrismaService) {}
 
   create(createProductDto: CreateProductDto) {
     return this.prismaService.product.create({
       data: {
         ...createProductDto,
-      }
+      },
     });
   }
 
