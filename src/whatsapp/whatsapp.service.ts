@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Client } from 'whatsapp-web.js';
+import { Client, LocalAuth } from 'whatsapp-web.js';
 import qrcode from 'qrcode-terminal';
+import { AgentsService } from 'src/agents/agents.service';
 
 @Injectable()
 export class WhatsappService {
+  constructor(private readonly agentsService: AgentsService) {}
+
   onModuleInit() {
     this.initializeClient();
   }
@@ -11,6 +14,7 @@ export class WhatsappService {
   initializeClient() {
     const client = new Client({
       puppeteer: { headless: true },
+      authStrategy: new LocalAuth(),
     });
 
     client.on('qr', (qr) => {
@@ -22,9 +26,21 @@ export class WhatsappService {
       console.log('Client is ready!');
     });
 
-    client.on('message', (msg) => {
-      if (msg.body == '!ping') {
-        msg.reply('pong');
+    client.on('message_create', async (msg) => {
+      console.log('Message received: ', msg.body);
+
+      const needsHelp = msg.body && msg.body.toLowerCase().includes('help');
+
+      // Simple keyword check to trigger agent response
+      if (needsHelp) {
+        const response = await this.agentsService.replyToUser({
+          query: msg.body,
+          userDetails: msg.from,
+        });
+
+        console.log('Reply: ', response);
+
+        msg.reply(response);
       }
     });
 
