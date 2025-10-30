@@ -14,8 +14,32 @@ model Product {
     name    String
     imageUrl    String
 
+    orders   OrderProduct[]
+
     price   Int
     description String?
 
     createdAt   DateTime @default(now())
+}
+
+model Order {
+    id  String @id @default(uuid())
+    
+    products    OrderProduct[]
+
+    totalPrice  Int
+
+    createdAt   DateTime @default(now())
+}
+
+model OrderProduct {
+    order   Order  @relation(fields: [orderId], references: [id])
+    orderId String
+
+    product Product @relation(fields: [productId], references: [id])
+    productId String
+
+    quantity Int
+
+    @@id([orderId, productId])
 }
