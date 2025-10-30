@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Client } from 'whatsapp-web.js';
+import qrcode from 'qrcode-terminal';
 
 @Injectable()
 export class WhatsappService {
@@ -14,7 +15,7 @@ export class WhatsappService {
 
     client.on('qr', (qr) => {
       // Kin here: you should scan this code with your phone to connect WhatsApp
-      console.log('QR RECEIVED', qr);
+      qrcode.generate(qr, {small: true});
     });
 
     client.on('ready', () => {
