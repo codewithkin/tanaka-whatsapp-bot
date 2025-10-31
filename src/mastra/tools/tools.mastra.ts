@@ -166,9 +166,9 @@ export const callDbAgentTool = createTool({
   description: "Calls the DbAgent to handle database operations",
   inputSchema: z.object({ query: z.string() }),
   outputSchema: z.object({ result: z.any() }),
-  execute: async ({ context }) => {
-    const result = await dbAgent.generate(context.query);
-    return { result };
+  execute: async ({ mastra }: any) => {
+    const result = await dbAgent.generate(mastra.query);
+    return result.text;
   },
 });
 

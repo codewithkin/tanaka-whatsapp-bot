@@ -8,7 +8,7 @@ const app = new Hono();
 // intialize whatsapp client
 initializeWhatsappClient();
 
-app.route('/products', products);
-app.route('/orders', orders);
+app.route("/products", products);
+app.route("/orders", orders);
 
 export default app;

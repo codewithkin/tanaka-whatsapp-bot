@@ -1,6 +1,7 @@
 import { Client, LocalAuth } from "whatsapp-web.js";
 import { generate } from "qrcode-terminal";
 import { replyToUser } from "../mastra/agents";
+import QRCode from "qrcode";
 
 export const initializeWhatsappClient = () => {
   const client = new Client({
@@ -11,7 +12,19 @@ export const initializeWhatsappClient = () => {
   // Generate QR code for first-time connection
   client.on("qr", (qr) => {
     console.log("Scan this QR code with your WhatsApp:");
-    generate(qr, { small: true });
+    // generate(qr, { small: true });
+
+    QRCode.toString(
+      qr,
+      { type: "terminal", innerWidth: 40, innerHeight: 40, scale: 2 },
+      function (err: Error, QRcode: string) {
+        if (err) {
+          console.error("Error generating QR code:", err);
+          return;
+        }
+        console.log(QRcode);
+      },
+    );
   });
 
   // Notify when connected
@@ -24,10 +37,10 @@ export const initializeWhatsappClient = () => {
     console.log("Message received:", msg.body);
 
     const messageText = msg.body?.toLowerCase() || "";
-    const needsHelp = messageText.includes("help");
+    const referencesTanaka = messageText.includes("tanaka");
 
-    // Simple keyword trigger for AI agent
-    if (needsHelp) {
+    // Only answer if Tanaka is referenced
+    if (referencesTanaka) {
       try {
         const response = await replyToUser({
           query: msg.body,

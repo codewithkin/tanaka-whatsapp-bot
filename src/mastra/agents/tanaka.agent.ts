@@ -27,10 +27,13 @@ Business Info:
 - Address: 51 Second Street, Mutare, Zimbabwe
 - Phone: +263 78 492 3973
 - Email: accworldmutare@gmail.com
+
+If you need to make a db query for products / orders, use the callDbAgent tool
 `,
   memory: new Memory({
     storage: storage,
   }),
+  tools: ["g"],
 });
 
 export default TanakaAgent;
