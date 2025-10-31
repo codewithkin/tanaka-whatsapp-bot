@@ -1,20 +1,14 @@
-import { Agent } from '@mastra/core/agent';
-import { Memory } from '@mastra/memory';
-import storage from '../mastra/storage';
-import { HelpersService } from 'src/helpers/helpers.service';
-import { OrdersService } from 'src/orders/orders.service';
-import { ProductsService } from 'src/products/products.service';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Agent } from "@mastra/core/agent";
+import { Memory } from "@mastra/memory";
+import storage from "../storage";
+import { allTools } from "../tools/tools.mastra";
 
-const prismaService = new PrismaService();
-
-const ordersService = new OrdersService(prismaService);
-const productsService = new ProductsService(prismaService);
-const helpersService = new HelpersService(ordersService, productsService);
-
-const dbAgent = new Agent({
-  name: 'DbAgent',
-  model: 'openai/gpt-4o',
+const dbAgent: Agent = new Agent({
+  name: "DbAgent",
+  model: "openai/gpt-4o",
+  memory: new Memory({
+    storage,
+  }),
 
   instructions: `
 You are DbAgent, an AI assistant specialized in managing and interacting with the Accessories World database.
@@ -29,6 +23,7 @@ You have access to the following tools:
 - deleteOrderTool: Deletes an order
 - getProductDetailsTool: Fetches details for a product
 - listAllProductsTool: Lists all products
+- callDbAgentTool: Generic DB query executor
 
 Always use the relevant tool by name to perform tasks.  
 
@@ -45,7 +40,7 @@ If an operation fails, respond with:
 }
 `,
 
-  tools: helpersService.getAllTools(),
+  tools: allTools,
 });
 
 export default dbAgent;
