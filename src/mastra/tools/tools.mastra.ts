@@ -3,7 +3,11 @@ import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { prisma } from "../../db/prisma";
 
+/* -------------------- HELPERS -------------------- */
+
 const generateRandomId = (): string => uuidv4();
+
+/* -------------------- ORDERS -------------------- */
 
 const createOrder = async (orderData: {
   userDetails: string;
@@ -24,49 +28,60 @@ const createOrder = async (orderData: {
       },
     },
     include: {
-      products: {
-        include: { product: true },
-      },
+      products: { include: { product: true } },
     },
   });
 };
 
-const getOrderDetails = async (userDetails: string) => {
-  return prisma.order.findUnique({
+const getOrderDetails = async (userDetails: string) =>
+  prisma.order.findUnique({
     where: { userDetails },
-    include: {
-      products: {
-        include: { product: true },
-      },
-    },
+    include: { products: { include: { product: true } } },
   });
-};
 
-const listAllOrders = async () => {
-  return prisma.order.findMany({
-    include: {
-      products: {
-        include: { product: true },
-      },
-    },
+const listAllOrders = async () =>
+  prisma.order.findMany({
+    include: { products: { include: { product: true } } },
   });
-};
 
-const deleteOrder = async (userDetails: string) => {
-  return prisma.order.delete({
-    where: { userDetails },
-  });
-};
+const deleteOrder = async (userDetails: string) =>
+  prisma.order.delete({ where: { userDetails } });
 
 /* -------------------- PRODUCTS -------------------- */
-const getProductDetails = async (name: string) => {
-  return prisma.product.findUnique({
-    where: { name },
-  });
+
+const getProductDetails = async (name: string) =>
+  prisma.product.findUnique({ where: { name } });
+
+const getProductById = async (id: string) =>
+  prisma.product.findUnique({ where: { id } });
+
+const listAllProducts = async () => prisma.product.findMany();
+
+const createProduct = async (data: {
+  name: string;
+  description?: string;
+  price: number;
+  stock?: number;
+  imageUrl: string;
+}) => {
+  return prisma.product.create({ data });
 };
 
-const listAllProducts = async () => {
-  return prisma.product.findMany();
+const updateProduct = async (
+  id: string,
+  data: Partial<{
+    name: string;
+    description?: string;
+    price?: number;
+    stock?: number;
+    imageUrl?: string;
+  }>,
+) => {
+  return prisma.product.update({ where: { id }, data });
+};
+
+const deleteProduct = async (id: string) => {
+  return prisma.product.delete({ where: { id } });
 };
 
 /* -------------------- TOOLS -------------------- */
@@ -78,6 +93,8 @@ export const generateRandomIdTool = createTool({
   outputSchema: z.object({ id: z.string() }),
   execute: async () => ({ id: generateRandomId() }),
 });
+
+/* ===== ORDERS ===== */
 
 export const createOrderTool = createTool({
   id: "create-order",
@@ -138,6 +155,8 @@ export const deleteOrderTool = createTool({
   },
 });
 
+/* ===== PRODUCTS ===== */
+
 export const getProductDetailsTool = createTool({
   id: "get-product-details",
   description: "Fetches details for a specific product by name",
@@ -145,6 +164,17 @@ export const getProductDetailsTool = createTool({
   outputSchema: z.object({ product: z.any() }),
   execute: async ({ context }) => {
     const product = await getProductDetails(context.name);
+    return { product };
+  },
+});
+
+export const getProductByIdTool = createTool({
+  id: "get-product-by-id",
+  description: "Fetches a single product by its unique ID",
+  inputSchema: z.object({ id: z.string() }),
+  outputSchema: z.object({ product: z.any() }),
+  execute: async ({ context }) => {
+    const product = await getProductById(context.id);
     return { product };
   },
 });
@@ -160,6 +190,63 @@ export const listAllProductsTool = createTool({
   },
 });
 
+export const createProductTool = createTool({
+  id: "create-product",
+  description: "Creates a new product in the system",
+  inputSchema: z.object({
+    name: z.string().min(2),
+    description: z.string().optional(),
+    price: z.number().nonnegative(),
+    stock: z.number().int().nonnegative().optional(),
+    imageUrl: z.string().url(),
+  }),
+  outputSchema: z.object({
+    success: z.boolean(),
+    product: z.any(),
+  }),
+  execute: async ({ context }) => {
+    const product = await createProduct(context);
+    return { success: true, product };
+  },
+});
+
+export const updateProductTool = createTool({
+  id: "update-product",
+  description: "Updates an existing product by ID",
+  inputSchema: z.object({
+    id: z.string(),
+    name: z.string().min(2).optional(),
+    description: z.string().optional(),
+    price: z.number().nonnegative().optional(),
+    stock: z.number().int().nonnegative().optional(),
+    imageUrl: z.string().url().optional(),
+  }),
+  outputSchema: z.object({
+    success: z.boolean(),
+    updatedProduct: z.any(),
+  }),
+  execute: async ({ context }) => {
+    const updatedProduct = await updateProduct(context.id, context);
+    return { success: true, updatedProduct };
+  },
+});
+
+export const deleteProductTool = createTool({
+  id: "delete-product",
+  description: "Deletes a product by its unique ID",
+  inputSchema: z.object({ id: z.string() }),
+  outputSchema: z.object({
+    success: z.boolean(),
+    message: z.string(),
+  }),
+  execute: async ({ context }) => {
+    await deleteProduct(context.id);
+    return { success: true, message: "Product deleted successfully" };
+  },
+});
+
+/* ===== EXPORT ALL TOOLS ===== */
+
 export const allTools = [
   generateRandomIdTool,
   createOrderTool,
@@ -167,5 +254,9 @@ export const allTools = [
   listAllOrdersTool,
   deleteOrderTool,
   getProductDetailsTool,
-  listAllProductsTool
+  getProductByIdTool,
+  listAllProductsTool,
+  createProductTool,
+  updateProductTool,
+  deleteProductTool,
 ];
