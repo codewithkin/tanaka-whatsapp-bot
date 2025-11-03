@@ -1,5 +1,5 @@
-import { PostgresStore } from '@mastra/pg';
-import { config } from 'dotenv';
+import { PostgresStore } from "@mastra/pg";
+import { config } from "dotenv";
 
 config();
 

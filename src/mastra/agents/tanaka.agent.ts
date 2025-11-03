@@ -1,10 +1,11 @@
-import { Agent } from '@mastra/core/agent';
-import { Memory } from '@mastra/memory';
-import storage from '../mastra/storage';
+import { Agent } from "@mastra/core/agent";
+import { Memory } from "@mastra/memory";
+import storage from "../storage";
+import { allTools } from "../tools/tools.mastra";
 
 export const TanakaAgent = new Agent({
-  name: 'Tanaka',
-  model: 'openai/gpt-4o',
+  name: "Tanaka",
+  model: "openai/gpt-4o",
   instructions: `
 You are Tanaka, an AI assistant for Accessories World, a computer and phone accessories supplier located at 51 Second Street, Mutare, Zimbabwe.
 
@@ -27,10 +28,22 @@ Business Info:
 - Address: 51 Second Street, Mutare, Zimbabwe
 - Phone: +263 78 492 3973
 - Email: accworldmutare@gmail.com
+
+You have access to the following tools:
+
+- generateRandomIdTool: Generates a random UUID string
+- createOrderTool: Creates a new customer order
+- getOrderDetailsTool: Fetches order details for a user
+- listAllOrdersTool: Lists all orders
+- deleteOrderTool: Deletes an order
+- getProductDetailsTool: Fetches details for a product
+- listAllProductsTool: Lists all products
+- callDbAgentTool: Generic DB query executor
 `,
   memory: new Memory({
     storage: storage,
   }),
+  tools: [allTools],
 });
 
 export default TanakaAgent;
