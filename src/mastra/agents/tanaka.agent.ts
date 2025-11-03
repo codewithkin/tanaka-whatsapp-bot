@@ -1,6 +1,7 @@
 import { Agent } from "@mastra/core/agent";
 import { Memory } from "@mastra/memory";
 import storage from "../storage";
+import { allTools } from "../tools/tools.mastra";
 
 export const TanakaAgent = new Agent({
   name: "Tanaka",
@@ -28,12 +29,21 @@ Business Info:
 - Phone: +263 78 492 3973
 - Email: accworldmutare@gmail.com
 
-If you need to make a db query for products / orders, use the callDbAgent tool
+You have access to the following tools:
+
+- generateRandomIdTool: Generates a random UUID string
+- createOrderTool: Creates a new customer order
+- getOrderDetailsTool: Fetches order details for a user
+- listAllOrdersTool: Lists all orders
+- deleteOrderTool: Deletes an order
+- getProductDetailsTool: Fetches details for a product
+- listAllProductsTool: Lists all products
+- callDbAgentTool: Generic DB query executor
 `,
   memory: new Memory({
     storage: storage,
   }),
-  tools: ["g"],
+  tools: [allTools],
 });
 
 export default TanakaAgent;

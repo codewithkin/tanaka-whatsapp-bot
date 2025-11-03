@@ -1,7 +1,6 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import dbAgent from "../agents/db.agent";
 import { prisma } from "../../db/prisma";
 
 const generateRandomId = (): string => uuidv4();
@@ -161,17 +160,6 @@ export const listAllProductsTool = createTool({
   },
 });
 
-export const callDbAgentTool = createTool({
-  id: "call-db-agent",
-  description: "Calls the DbAgent to handle database operations",
-  inputSchema: z.object({ query: z.string() }),
-  outputSchema: z.object({ result: z.any() }),
-  execute: async ({ mastra }: any) => {
-    const result = await dbAgent.generate(mastra.query);
-    return result.text;
-  },
-});
-
 export const allTools = [
   generateRandomIdTool,
   createOrderTool,
@@ -179,6 +167,5 @@ export const allTools = [
   listAllOrdersTool,
   deleteOrderTool,
   getProductDetailsTool,
-  listAllProductsTool,
-  callDbAgentTool,
+  listAllProductsTool
 ];
