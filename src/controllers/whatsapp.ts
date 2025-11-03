@@ -16,7 +16,7 @@ export const initializeWhatsappClient = () => {
 
     QRCode.toString(
       qr,
-      { type: "terminal", innerWidth: 40, innerHeight: 40, scale: 2 },
+      { type: "terminal", small: true },
       function (err: Error, QRcode: string) {
         if (err) {
           console.error("Error generating QR code:", err);
