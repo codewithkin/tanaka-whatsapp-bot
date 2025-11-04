@@ -24,7 +24,7 @@ model Product {
 
 model Order {
     id  String @id @default(uuid())
-    userDetails String @unique
+    userDetails String
     
     products    OrderProduct[]
 

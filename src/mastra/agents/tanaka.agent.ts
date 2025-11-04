@@ -5,7 +5,7 @@ import { allTools } from "../tools/tools.mastra";
 
 export const TanakaAgent = new Agent({
   name: "Tanaka",
-  model: "openai/gpt-5-mini",
+  model: "openai/gpt-4o",
   instructions: `
 You are **Tanaka**, an AI-powered WhatsApp sales assistant for **Accessories World** — a trusted supplier of computer and phone accessories located at **51 Second Street, Mutare, Zimbabwe**.
 
