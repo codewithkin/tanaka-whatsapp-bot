@@ -34,7 +34,7 @@ const createOrder = async (orderData: {
 };
 
 const getOrderDetails = async (userDetails: string) =>
-  prisma.order.findUnique({
+  prisma.order.findFirst({
     where: { userDetails },
     include: { products: { include: { product: true } } },
   });
@@ -44,8 +44,20 @@ const listAllOrders = async () =>
     include: { products: { include: { product: true } } },
   });
 
-const deleteOrder = async (userDetails: string) =>
-  prisma.order.delete({ where: { userDetails } });
+const deleteOrder = async (userDetails: string) =>{
+  // Find the order first
+  const order = await prisma.order.findFirst({
+    where: {userDetails}
+  });
+
+  if(!order) {
+    return {
+      message: "Order doesn't exist, it must have already been deleted"
+    }
+  }
+
+  return prisma.order.delete({ where: { id: order.id } });
+}
 
 /* -------------------- PRODUCTS -------------------- */
 
